@@ -1,41 +1,49 @@
-const dollars = process.argv[2];
+const dollarsInput = process.argv[2];
 
-const popBottles = (dollars, fullBottles = 0, emptyBottles = 0, bottleCaps = 0) => {
+const popBottles = (assetInfo) => {
 
-  if (dollars === undefined) {
+  if (assetInfo.dollars === undefined) {
     console.log();
     console.log();
     console.log();
     console.log();
     return 0;
   }
+
   //convert full bottles into emptyBottles and caps
-  emptyBottles += fullBottles;
-  bottleCaps += fullBottles;
-  fullBottles = 0;
+  assetInfo.emptyBottles += assetInfo.fullBottles;
+  assetInfo.bottleCaps += assetInfo.fullBottles;
+  assetInfo.fullBottles = 0;
 
   //base case
-  if (dollars < 2 && emptyBottles < 2 && bottleCaps < 4) return 0;
+  if (assetInfo.dollars < 2 && assetInfo.emptyBottles < 2 && assetInfo.bottleCaps < 4) return 0;
 
   //I feel like theres a way to do these without a tempValue but idk
   let tempValue = 0;
 
   //Trade dollars for full bottles
-  tempValue = Math.floor(dollars / 2);
-  dollars -= tempValue * 2;
-  fullBottles += tempValue;
+  tempValue = Math.floor(assetInfo.dollars / 2);
+  assetInfo.dollars -= tempValue * 2;
+  assetInfo.fullBottles += tempValue;
 
   //Trade emptyBottles for full bottles
-  tempValue = Math.floor(emptyBottles / 2);
-  emptyBottles -= tempValue * 2;
-  fullBottles += tempValue;
+  tempValue = Math.floor(assetInfo.emptyBottles / 2);
+  assetInfo.emptyBottles -= tempValue * 2;
+  assetInfo.fullBottles += tempValue;
 
   //Trade caps for full bottles
-  tempValue = Math.floor(bottleCaps / 4);
-  bottleCaps -= tempValue * 4;
-  fullBottles += tempValue;
+  tempValue = Math.floor(assetInfo.bottleCaps / 4);
+  assetInfo.bottleCaps -= tempValue * 4;
+  assetInfo.fullBottles += tempValue;
 
-  return fullBottles + popBottles(dollars, fullBottles, emptyBottles, bottleCaps);
+  return assetInfo.fullBottles + popBottles(assetInfo);
 };
 
-console.log(popBottles(dollars));
+console.log(popBottles({
+  dollars: dollarsInput,
+  fullBottles: 0,
+  obtainedWithEmptyBottles: 0,
+  obtainedWithCaps: 0,
+  emptyBottles: 0,
+  bottleCaps: 0
+}));
